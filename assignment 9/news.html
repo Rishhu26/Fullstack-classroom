@@ -1,1 +1,83 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tech News</title>
+</head>
+
+<body>
+
+<h1>Tech News</h1>
+
+<p>
+<button class="topic" data-topic="AI">AI</button>
+<button class="topic" data-topic="javascript">Javascript</button>
+<button class="topic" data-topic="startup">Startup</button>
+<button class="topic" data-topic="programming">Programming</button>
+</p>
+
+<hr>
+
+<div id="news"></div>
+
+
+
+<script>
+
+const buttons = document.querySelectorAll(".topic");
+const newsDiv = document.getElementById("news");
+
+buttons.forEach(button => {
+
+button.addEventListener("click", async () => {
+
+const topic = button.dataset.topic;
+
+newsDiv.innerHTML = "Loading news...";
+
+const url = `https://hn.algolia.com/api/v1/search?query=${topic}`;
+
+const response = await fetch(url);
+const data = await response.json();
+
+newsDiv.innerHTML = "";
+
+data.hits.slice(0,5).forEach(article => {
+
+newsDiv.innerHTML += `
+<h3>${article.title}</h3>
+<a href="${article.url}" target="_blank">Read more</a>
+<hr>
+`;
+
+});
+
+});
+
+});
+
+</script>
+
+
+
+<style>
+body{
+font-family: Arial;
+max-width: 700px;
+margin:auto;
+}
+
+button{
+padding:8px 15px;
+margin:5px;
+cursor:pointer;
+}
+
+h3{
+color:#1b1b1b;
+}
+</style>
+
+</body>
+</html>
